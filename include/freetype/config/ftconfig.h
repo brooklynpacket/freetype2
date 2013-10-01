@@ -380,21 +380,34 @@ FT_BEGIN_HEADER
   FT_MulFix_arm( FT_Int32  a,
                  FT_Int32  b )
   {
-    register FT_Int32  t, t2;
-
-
-    __asm__ __volatile__ (
-      "smull  %1, %2, %4, %3\n\t"       /* (lo=%1,hi=%2) = a*b */
-      "mov    %0, %2, asr #31\n\t"      /* %0  = (hi >> 31) */
-      "add    %0, %0, #0x8000\n\t"      /* %0 += 0x8000 */
-      "adds   %1, %1, %0\n\t"           /* %1 += %0 */
-      "adc    %2, %2, #0\n\t"           /* %2 += carry */
-      "mov    %0, %1, lsr #16\n\t"      /* %0  = %1 >> 16 */
-      "orr    %0, %0, %2, lsl #16\n\t"  /* %0 |= %2 << 16 */
-      : "=r"(a), "=&r"(t2), "=&r"(t)
-      : "r"(a), "r"(b)
-      : "cc" );
-    return a;
+      /* BPC_PATCH start */
+//    register FT_Int32  t, t2;
+//
+//
+//    __asm__ __volatile__ (
+//      "smull  %1, %2, %4, %3\n\t"       /* (lo=%1,hi=%2) = a*b */
+//      "mov    %0, %2, asr #31\n\t"      /* %0  = (hi >> 31) */
+//      "add    %0, %0, #0x8000\n\t"      /* %0 += 0x8000 */
+//      "adds   %1, %1, %0\n\t"           /* %1 += %0 */
+//      "adc    %2, %2, #0\n\t"           /* %2 += carry */
+//      "mov    %0, %1, lsr #16\n\t"      /* %0  = %1 >> 16 */
+//      "orr    %0, %0, %2, lsl #16\n\t"  /* %0 |= %2 << 16 */
+//      : "=r"(a), "=&r"(t2), "=&r"(t)
+//      : "r"(a), "r"(b)
+//      : "cc" );
+//    return a;
+      
+      /* Technically not an assembly fragment, but GCC does a really good */
+      /* job at inlining it and generating good machine code for it.      */
+      long long  ret, tmp;
+      
+      
+      ret  = (long long)a * b;
+      tmp  = ret >> 63;
+      ret += 0x8000 + tmp;
+      
+      return (FT_Int32)( ret >> 16 );
+    /* BPC_PATCH end */
   }
 
 #endif /* __arm__                      && */
