@@ -1466,31 +1466,20 @@
     }
 
 #elif defined( __GNUC__ )
-        /* BPC_PATCH start */
-//    __asm__ __volatile__ (
-//      "smull  %1, %2, %4, %3\n\t"       /* (lo=%1,hi=%2) = a*b */
-//      "mov    %0, %2, asr #31\n\t"      /* %0  = (hi >> 31) */
-//      "add    %0, %0, #0x2000\n\t"      /* %0 += 0x2000 */
-//      "adds   %1, %1, %0\n\t"           /* %1 += %0 */
-//      "adc    %2, %2, #0\n\t"           /* %2 += carry */
-//      "mov    %0, %1, lsr #14\n\t"      /* %0  = %1 >> 16 */
-//      "orr    %0, %0, %2, lsl #18\n\t"  /* %0 |= %2 << 16 */
-//      : "=r"(a), "=&r"(t2), "=&r"(t)
-//      : "r"(a), "r"(b)
-//      : "cc" );
-      long long  ret = (long long)a * b;
-      
-      /* The following line assumes that right shifting of signed values */
-      /* will actually preserve the sign bit.  The exact behaviour is    */
-      /* undefined, but this is true on x86 and x86_64.                  */
-      long long  tmp = ret >> 63;
-      
-      
-      ret += 0x2000 + tmp;
-      
-      return (FT_Int32)( ret >> 14 );
-      
+
+    __asm__ __volatile__ (
+      "smull  %1, %2, %4, %3\n\t"       /* (lo=%1,hi=%2) = a*b */
+      "mov    %0, %2, asr #31\n\t"      /* %0  = (hi >> 31) */
+    /* BPC_PATCH start */
+      "add.w    %0, %0, #0x2000\n\t"      /* %0 += 0x2000 */
     /* BPC_PATCH end */
+      "adds   %1, %1, %0\n\t"           /* %1 += %0 */
+      "adc    %2, %2, #0\n\t"           /* %2 += carry */
+      "mov    %0, %1, lsr #14\n\t"      /* %0  = %1 >> 16 */
+      "orr    %0, %0, %2, lsl #18\n\t"  /* %0 |= %2 << 16 */
+      : "=r"(a), "=&r"(t2), "=&r"(t)
+      : "r"(a), "r"(b)
+      : "cc" );
 
 #endif
 
