@@ -2434,6 +2434,7 @@
 				OTHER_LDFLAGS = "";
 				PREBINDING = YES;
 				PRODUCT_NAME = Freetype2;
+				SKIP_INSTALL = YES;
 				WARNING_CFLAGS = (
 					"-Wextra",
 					"-Wall",
@@ -2456,6 +2457,7 @@
 				OTHER_CFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Freetype2;
+				SKIP_INSTALL = YES;
 				WARNING_CFLAGS = (
 					"-Wextra",
 					"-Wall",
