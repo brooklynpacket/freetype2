@@ -800,12 +800,14 @@
     FT_Error  error = FT_Err_Ok;
     FT_UInt   num_components, nn;
 
-    FT_Char  horiBearingX = decoder->metrics->horiBearingX;
-    FT_Char  horiBearingY = decoder->metrics->horiBearingY;
-    FT_Byte  horiAdvance  = decoder->metrics->horiAdvance;
-    FT_Char  vertBearingX = decoder->metrics->vertBearingX;
-    FT_Char  vertBearingY = decoder->metrics->vertBearingY;
-    FT_Byte  vertAdvance  = decoder->metrics->vertAdvance;
+    /** BPC Patch. Cast types to hide warnings. From later FreeType commit */
+    FT_Char  horiBearingX = (FT_Char)decoder->metrics->horiBearingX;
+    FT_Char  horiBearingY = (FT_Char)decoder->metrics->horiBearingY;
+    FT_Byte  horiAdvance  = (FT_Byte)decoder->metrics->horiAdvance;
+    FT_Char  vertBearingX = (FT_Char)decoder->metrics->vertBearingX;
+    FT_Char  vertBearingY = (FT_Char)decoder->metrics->vertBearingY;
+    FT_Byte  vertAdvance  = (FT_Byte)decoder->metrics->vertAdvance;
+    /** BPC Patch. END */
 
 
     if ( p + 2 > limit )
@@ -956,7 +958,8 @@
       goto Fail;
 
     {
-      TT_SBitDecoder_LoadFunc  loader;
+      /** BPC Patch: Default to NULL to suppress uninitiailised error. */
+      TT_SBitDecoder_LoadFunc  loader = NULL;
 
 
       switch ( glyph_format )
