@@ -4,7 +4,8 @@ include $(CLEAR_VARS)
 # compile in ARM mode, since the glyph loader/renderer is a hotspot
 # when loading complex pages in the browser
 #
-LOCAL_ARM_MODE := arm
+# Uncomment to compile with ARM instruction set instead of Thumb
+#LOCAL_ARM_MODE := arm
 
 LOCAL_SRC_FILES:= \
     src/base/ftsystem.c     \
@@ -59,7 +60,7 @@ LOCAL_C_INCLUDES += \
     $(LOCAL_PATH)/include/freetype/config \
     $(LOCAL_PATH)/include/freetype/internal
 
-LOCAL_CFLAGS += -W -Wall
+LOCAL_CFLAGS += -W -Wall -fvisibility=hidden
 LOCAL_CFLAGS += -fPIC -DPIC
 LOCAL_CFLAGS += "-DDARWIN_NO_CARBON"
 LOCAL_CFLAGS += "-DFT2_BUILD_LIBRARY"
