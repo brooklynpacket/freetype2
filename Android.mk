@@ -60,10 +60,15 @@ LOCAL_C_INCLUDES += \
     $(LOCAL_PATH)/include/freetype/config \
     $(LOCAL_PATH)/include/freetype/internal
 
-LOCAL_CFLAGS += -W -Wall -fvisibility=hidden
+LOCAL_CFLAGS += -W -Wall
 LOCAL_CFLAGS += -fPIC -DPIC
 LOCAL_CFLAGS += "-DDARWIN_NO_CARBON"
 LOCAL_CFLAGS += "-DFT2_BUILD_LIBRARY"
+
+ifneq ($(NDK_DEBUG),1)
+LOCAL_CFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden
+LOCAL_CPPFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden
+endif
 
 # enable the FreeType internal memory debugger in the simulator
 # you need to define the FT2_DEBUG_MEMORY environment variable
