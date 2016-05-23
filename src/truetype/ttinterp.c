@@ -1471,11 +1471,7 @@
       "smull  %1, %2, %4, %3\n\t"       /* (lo=%1,hi=%2) = a*b */
       "mov    %0, %2, asr #31\n\t"      /* %0  = (hi >> 31) */
     /* BPC_PATCH start */
-#ifdef __clang__
-      "add.w    %0, %0, #0x2000\n\t"      /* %0 += 0x2000 */
-#else
       "add    %0, %0, #0x2000\n\t"      /* %0 += 0x2000 */
-#endif
     /* BPC_PATCH end */
       "adds   %1, %1, %0\n\t"           /* %1 += %0 */
       "adc    %2, %2, #0\n\t"           /* %2 += carry */
