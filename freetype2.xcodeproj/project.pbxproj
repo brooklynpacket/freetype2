@@ -2437,10 +2437,7 @@
 				PREBINDING = YES;
 				PRODUCT_NAME = Freetype2;
 				SKIP_INSTALL = YES;
-				WARNING_CFLAGS = (
-					"-Wextra",
-					"-Wall",
-				);
+				WARNING_CFLAGS = "";
 			};
 			name = Debug;
 		};
@@ -2461,10 +2458,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = Freetype2;
 				SKIP_INSTALL = YES;
-				WARNING_CFLAGS = (
-					"-Wextra",
-					"-Wall",
-				);
+				WARNING_CFLAGS = "";
 				ZERO_LINK = NO;
 			};
 			name = Release;
